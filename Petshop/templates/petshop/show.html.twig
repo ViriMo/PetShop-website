@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{%  form_theme formComment 'bootstrap_4_layout.html.twig' %}
+
 {% block body %}
     <section class="pet">
         <h1>
@@ -20,18 +22,39 @@
         <h1>
             Comment
         </h1>
+        <hr/>
+        <h2>
+            Write comment
+        </h2>
+        {{ form_start(formComment) }}
+
+        {{ form_row(formComment.uid, {'attr': {'placeholder': "username" }, 'label': "Username"}) }}
+
+        {{ form_row(formComment.content, {'attr': {'placeholder': "Comment"}, 'label': "Comment" }) }}
+
+        <p>
+            <button type="submit" class="btn btn-success">
+                Comment
+            </button>
+        </p>
+
+        {{ form_end(formComment) }}
+
+        <hr/>
 
         {% for comment in comments %}
             <div class="card text-white bg-primary mb-3">
                 <div class="card-header">
                     {{ comment.uid }}
                     <img src="{{ comment.image }}" alt="">
+                    <a class="btn btn-success"  href="{{ path('edit', {'id': comment.id}) }}" style="margin-left: 85%">Edit</a>
                 </div>
                 <div class="card-body">
                     <h4 class="card-title">On {{ comment.createdAt | date('m/d/Y') }} at {{ comment.createdAt | date('H:i') }}</h4>
                     <p class="card-text">{{ comment.content }}</p>
                 </div>
             </div>
+            <hr/>
         {% endfor %}
 
     </section>

@@ -36,6 +36,11 @@ class Comment
      */
     private $content;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $pid;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +90,18 @@ class Comment
     public function setContent(string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getPid(): ?int
+    {
+        return $this->pid;
+    }
+
+    public function setPid(int $pid): self
+    {
+        $this->pid = $pid;
 
         return $this;
     }

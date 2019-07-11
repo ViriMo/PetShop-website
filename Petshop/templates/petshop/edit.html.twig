@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <h2>
+        Edit comment
+    </h2>
+    {{ form_start(formComment) }}
+
+    {{ form_row(formComment.uid, {'attr': {'placeholder': "username" }}) }}
+
+    {{ form_row(formComment.content, {'attr': {'placeholder': "Comment"}}) }}
+
+    <p>
+        <button type="submit" class="btn btn-success">
+            Edit comment
+        </button>
+    </p>
+
+    {{ form_end(formComment) }}
+{% endblock body %}

@@ -16,7 +16,8 @@ class CommentFixtures extends Fixture
             $Comment->setUid('Viriya')
                 ->setContent('I love that cat')
                 ->setCreatedAt(new \DateTime())
-                ->setImage("http://placehold.it/50x50");
+                ->setImage("http://placehold.it/50x50")
+                ->setPid(1);
             $manager->persist($Comment);
         }
 
