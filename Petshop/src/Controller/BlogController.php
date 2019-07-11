@@ -46,7 +46,7 @@ class BlogController extends AbstractController
      */
     public function pet(PetRepository $repo)
     {
-        $pet = $repo->findby([], ["pid" => 'DESC']);
+        $pet = $repo->findby([], ["id" => 'DESC']);
         return $this->render('petshop/pet.html.twig', [
             'pets' => $pet
         ]);
@@ -113,7 +113,7 @@ class BlogController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $manager->persist($comment);
             $manager->flush();
-            return $this->redirectToRoute('pet_show', ['id' => $comment->getPid()]);
+            return $this->redirectToRoute('pet_show', ['id' => $comment->getPet()->getId()]);
         }
 
 
@@ -126,31 +126,21 @@ class BlogController extends AbstractController
     /**
      * @Route("/pet/{id}", name="pet_show")
      */
-    public function show(PetRepository $petrepo, CommentRepository $commentrepo, $id,
-                         Request $request, ObjectManager $manager)
+    public function show(PetRepository $petrepo, $id, Request $request, ObjectManager $manager)
     {
-
-        $pet = $petrepo->findOneBy(["pid" => $id]);
-        $comment = $commentrepo->findBy(["pid" => $id], ["createdAt" => 'DESC']);
-
+        $pet = $petrepo->findOneBy(["id" => $id]);
         $com = new Comment();
-
-
         $form = $this->createForm(CommentType::class, $com);
-
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
             $com->setCreatedAt(new \DateTime());
-            $com->setPid($id);
-            $com->setImage('http://placehold.it/50x50');
             $manager->persist($com);
             $manager->flush();
-            return $this->redirectToRoute('pet_show', ['id' => $com->getPid()]);
+            return $this->redirectToRoute('pet_show', ['id' => $pet->getId()]);
         }
 
         return $this->render('petshop/show.html.twig', [
-            "comments" => $comment,
             "pet" => $pet,
             "formComment" => $form->createView()
             ]);

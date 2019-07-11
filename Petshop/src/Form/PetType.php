@@ -14,7 +14,6 @@ class PetType extends AbstractType
         $builder
             ->add('name')
             ->add('price')
-            ->add('pid')
             ->add('content')
             ->add('image')
         ;

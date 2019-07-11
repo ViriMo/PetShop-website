@@ -11,6 +11,8 @@
         <div class="metadata">
             <img src="{{ pet.image }}"alt="">
             <p>
+                Seller : {{ pet.user.username }}
+                <br/>
                 {{ pet.content }}
                 <br/>
                 Pet Price : {{ pet.price }} €
@@ -29,7 +31,6 @@
         </h2>
         {{ form_start(formComment) }}
 
-        {{ form_row(formComment.uid, {'attr': {'placeholder': "username" }, 'label': "Username"}) }}
 
         {{ form_row(formComment.content, {'attr': {'placeholder': "Comment"}, 'label': "Comment" }) }}
 
@@ -43,12 +44,11 @@
 
         <hr/>
 
-        {% for comment in comments %}
+        {% for comment in pet.comments %}
             <div class="card text-white bg-primary mb-3">
                 <div class="card-header">
-                    <img src="{{ comment.image }}" alt="">
-                    {{ comment.uid }}
-                    <a class="btn btn-success"  href="{{ path('edit', {'id': comment.id}) }}" style="margin-left: 85%">Edit</a>
+                    {{ comment.user.username }}
+                    <a class="btn btn-success"  href="{{ path('edit', {'id': comment.id}) }}" style="float: right;">Edit</a>
                 </div>
                 <div class="card-body">
                     <h4 class="card-title">On {{ comment.createdAt | date('m/d/Y') }} at {{ comment.createdAt | date('H:i') }}</h4>

@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraint as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
@@ -18,9 +17,15 @@ class Comment
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
-    private $uid;
+    private $content;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Pet", inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $pet;
 
     /**
      * @ORM\Column(type="datetime")
@@ -28,33 +33,35 @@ class Comment
     private $createdAt;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
      */
-    private $image;
-
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $content;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $pid;
+    private $user;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUid(): ?string
+    public function getContent(): ?string
     {
-        return $this->uid;
+        return $this->content;
     }
 
-    public function setUid(string $uid): self
+    public function setContent(string $content): self
     {
-        $this->uid = $uid;
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getPet(): ?Pet
+    {
+        return $this->pet;
+    }
+
+    public function setPet(?Pet $pet): self
+    {
+        $this->pet = $pet;
 
         return $this;
     }
@@ -71,38 +78,14 @@ class Comment
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getUser(): ?User
     {
-        return $this->image;
+        return $this->user;
     }
 
-    public function setImage(string $image): self
+    public function setUser(?User $user): self
     {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    public function getContent(): ?string
-    {
-        return $this->content;
-    }
-
-    public function setContent(string $content): self
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    public function getPid(): ?int
-    {
-        return $this->pid;
-    }
-
-    public function setPid(int $pid): self
-    {
-        $this->pid = $pid;
+        $this->user = $user;
 
         return $this;
     }
