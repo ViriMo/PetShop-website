@@ -3,6 +3,7 @@
 {%  form_theme formComment 'bootstrap_4_layout.html.twig' %}
 
 {% block body %}
+    <a class="btn btn-primary" href="{{ path('pet') }}">Back</a>
     <section class="pet">
         <h1>
             {{ pet.name }}
@@ -12,7 +13,7 @@
             <p>
                 {{ pet.content }}
                 <br/>
-                Pet Price : {{ pet.price }}
+                Pet Price : {{ pet.price }} €
 
             </p>
             <hr/>
@@ -45,8 +46,8 @@
         {% for comment in comments %}
             <div class="card text-white bg-primary mb-3">
                 <div class="card-header">
-                    {{ comment.uid }}
                     <img src="{{ comment.image }}" alt="">
+                    {{ comment.uid }}
                     <a class="btn btn-success"  href="{{ path('edit', {'id': comment.id}) }}" style="margin-left: 85%">Edit</a>
                 </div>
                 <div class="card-body">

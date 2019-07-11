@@ -7,9 +7,9 @@
     </h2>
     {{ form_start(formComment) }}
 
-    {{ form_row(formComment.uid, {'attr': {'placeholder': "username" }}) }}
+    {{ form_row(formComment.uid, {'label': 'Username'}) }}
 
-    {{ form_row(formComment.content, {'attr': {'placeholder': "Comment"}}) }}
+    {{ form_row(formComment.content, {'label': 'Comment'}) }}
 
     <p>
         <button type="submit" class="btn btn-success">

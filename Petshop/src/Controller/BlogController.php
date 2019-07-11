@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\CommentRepository;
+use App\Entity\Pet;
 use App\Entity\Comment;
 use App\Repository\PetRepository;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -10,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\CommentType;
+use App\Form\PetType;
 
 class BlogController extends AbstractController
 {
@@ -44,7 +46,7 @@ class BlogController extends AbstractController
      */
     public function pet(PetRepository $repo)
     {
-        $pet = $repo->findAll();
+        $pet = $repo->findby([], ["pid" => 'DESC']);
         return $this->render('petshop/pet.html.twig', [
             'pets' => $pet
         ]);
@@ -64,6 +66,37 @@ class BlogController extends AbstractController
     public function about()
     {
         return $this->render('petshop/about.html.twig');
+    }
+
+    /**
+     * @Route("/sell", name="sell")
+     */
+    public function sell(Pet $pet = null, Request $request, ObjectManager $manager)
+    {
+        if(!$pet) {
+            $pet = new Pet();
+        }
+        $form = $this->createForm(PetType::class, $pet);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+                $manager->persist($pet);
+                $manager->flush();
+                return $this->redirectToRoute('sell');
+        }
+
+        return $this->render('petshop/sell.html.twig', [
+            'formPet' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/fun", name="fun")
+     */
+    public function fun()
+    {
+        return $this->render('petshop/fun.html.twig');
     }
 
 

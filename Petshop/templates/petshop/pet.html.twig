@@ -10,18 +10,19 @@
                 {{ pet.name }}
             </h2>
             <div class="metadata">
-                <img src="{{ pet.image }}"alt="">
+                <img src="{{ pet.image }}"alt="Internet died">
                 <p>
                     {{ pet.content }}
-                    <br/>
-                    Pet Price : {{ pet.price }}
-
                 </p>
+
+                    Pet Price : {{ pet.price }} €
+                <br/>
                 <a href="{{ path('pet_show', {'id': pet.pid}) }}" class="btn btn-primary">
                     Learn more
                 </a>
-                <hr/>
+                <br/>
             </div>
+            <hr/>
         {% endfor %}
     </section>
 

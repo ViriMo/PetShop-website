@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>
+        Sell your pet here
+    </h1>
+    {{ form_start(formPet) }}
+
+
+    {{ form_row(formPet.name, {'attr': {'placeholder': "Pet name" }, 'label': "Pet name"}) }}
+
+    {{ form_row(formPet.pid, {'attr': {'placeholder': "Pid used to look for your pet in the website" }, 'label': "Pid"}) }}
+
+    {{ form_row(formPet.price, {'attr': {'placeholder': "Pet price (in €)" }, 'label': "Pet price"}) }}
+
+    {{ form_row(formPet.image, {'attr': {'placeholder': "insert image" }, 'label': "Pet image"}) }}
+
+    {{ form_row(formPet.content, {'attr': {'placeholder': "Description of your pet" }, 'label': "Description"}) }}
+
+    <p>
+        <button type="submit" class="btn btn-success">
+            Sell
+        </button>
+    </p>
+
+    {{ form_end(formPet) }}
+{% endblock body %}
