@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="pet">
+        <h1>
+            {{ pet.name }}
+        </h1>
+        <div class="metadata">
+            <img src="{{ pet.image }}"alt="">
+            <p>
+                {{ pet.content }}
+                <br/>
+                Pet Price : {{ pet.price }}
+
+            </p>
+            <hr/>
+        </div>
+    </section>
+    <section>
+        <h1>
+            Comment
+        </h1>
+
+        {% for comment in comments %}
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">
+                    {{ comment.uid }}
+                    <img src="{{ comment.image }}" alt="">
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">On {{ comment.createdAt | date('m/d/Y') }} at {{ comment.createdAt | date('H:i') }}</h4>
+                    <p class="card-text">{{ comment.content }}</p>
+                </div>
+            </div>
+        {% endfor %}
+
+    </section>
+{% endblock body %}

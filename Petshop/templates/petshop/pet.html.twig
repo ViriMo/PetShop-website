@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="pet">
+        <h1 style="margin-left: 40%">
+            Petshop list
+        </h1>
+        {% for pet in pets %}
+            <h2>
+                {{ pet.name }}
+            </h2>
+            <div class="metadata">
+                <img src="{{ pet.image }}"alt="">
+                <p>
+                    {{ pet.content }}
+                    <br/>
+                    Pet Price : {{ pet.price }}
+
+                </p>
+                <a href="{{ path('pet_show', {'id': pet.pid}) }}" class="btn btn-primary">
+                    Learn more
+                </a>
+                <hr/>
+            </div>
+        {% endfor %}
+    </section>
+
+{% endblock body %}
