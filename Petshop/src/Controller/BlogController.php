@@ -69,7 +69,7 @@ class BlogController extends AbstractController
 
 
     /**
-     * @Route("edit/{id}", name="edit")
+     * @Route("/pet/edit/{id}", name="edit")
      */
     public function edit($id, CommentRepository $commentrepo, Request $request, ObjectManager $manager)
     {
@@ -83,8 +83,9 @@ class BlogController extends AbstractController
             return $this->redirectToRoute('pet_show', ['id' => $comment->getPid()]);
         }
 
+
         return $this->render('petshop/edit.html.twig', [
-            "comment" => $comment
+            "formComment" => $form->createView()
         ]);
     }
 
