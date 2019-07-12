@@ -18,7 +18,7 @@ class PetFixtures extends Fixture
         for($i = 0; $i < 8; $i++) {
             $user = new User();
             $user->setUsername($faker->name)
-                 ->setRoles(array('ROLE_MEMBER'))
+                 ->setRoles(array('ROLE_USER'))
                  ->setPassword('Password')
                  ->setImage('https://imgflip.com/s/meme/Cute-Cat.jpg');
             $manager->persist($user);

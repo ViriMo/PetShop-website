@@ -15,18 +15,19 @@
 
             <div class="collapse navbar-collapse" id="navbarColor02">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('login') }}">login</a>
-                    </li>
+                    {% if not app.user %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('register') }}">Register</a>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('pet') }}">Pet</a>
                     </li>
+                    {% if app.user %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('sell') }}">Sell</a>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('fun') }}">Fun pet</a>
                     </li>
@@ -37,6 +38,11 @@
                 <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="text" placeholder="Search">
                     <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                    {% if not app.user %}
+                    <a class="btn btn-secondary my-2 my-sm-0" href="{{ path('login') }}">log in</a>
+                    {% else %}
+                    <a class="btn btn-secondary my-2 my-sm-0" href="{{ path('logout') }}">Log Out</a>
+                    {% endif %}
                 </form>
             </div>
         </nav>

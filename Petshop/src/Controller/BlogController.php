@@ -7,6 +7,7 @@ use App\Entity\Pet;
 use App\Entity\Comment;
 use App\Repository\PetRepository;
 use Doctrine\Common\Persistence\ObjectManager;
+use http\Client\Curl\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,14 +35,6 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/login", name="login")
-     */
-    public function login()
-    {
-        return $this->render('petshop/login.html.twig');
-    }
-
-    /**
      * @Route("/pet", name="pet")
      */
     public function pet(PetRepository $repo)
@@ -50,14 +43,6 @@ class BlogController extends AbstractController
         return $this->render('petshop/pet.html.twig', [
             'pets' => $pet
         ]);
-    }
-
-    /**
-     * @Route("/register", name="register")
-     */
-    public function register()
-    {
-        return $this->render('petshop/register.html.twig');
     }
 
     /**
@@ -81,6 +66,9 @@ class BlogController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
+            if($this->getUser()) {
+                $pet->setUser($this->getUser()); //should always happen
+            }
                 $manager->persist($pet);
                 $manager->flush();
                 return $this->redirectToRoute('sell');
@@ -134,6 +122,10 @@ class BlogController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            if($this->getUser()) {
+                $com->setUser($this->getUser()); //should always happen
+            }
+            $com->setPet($pet);
             $com->setCreatedAt(new \DateTime());
             $manager->persist($com);
             $manager->flush();

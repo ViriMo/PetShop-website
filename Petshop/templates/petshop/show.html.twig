@@ -9,7 +9,7 @@
             {{ pet.name }}
         </h1>
         <div class="metadata">
-            <img src="{{ pet.image }}"alt="">
+            <img src="{{ pet.image }}"alt="" style="height: 500px; width: 500px;">
             <p>
                 Seller : {{ pet.user.username }}
                 <br/>
@@ -23,9 +23,10 @@
     </section>
     <section>
         <h1>
-            Comment
+            {{ pet.comments | length }} Comment{% if pet.comments | length > 1 %}s{% endif %}
         </h1>
         <hr/>
+        {% if app.user %}
         <h2>
             Write comment
         </h2>
@@ -41,14 +42,23 @@
         </p>
 
         {{ form_end(formComment) }}
-
+        {% else %}
+            <h3>
+                Login to add comment !
+            </h3>
+        {% endif %}
         <hr/>
 
         {% for comment in pet.comments %}
             <div class="card text-white bg-primary mb-3">
                 <div class="card-header">
+                    <img src=" {{ comment.user.image }} " alt="net bug" style="width: 50px; height: 50px;">
                     {{ comment.user.username }}
+                    {% if app.user %}
+                    {% if app.user.username == comment.user.username %}
                     <a class="btn btn-success"  href="{{ path('edit', {'id': comment.id}) }}" style="float: right;">Edit</a>
+                    {% endif %}
+                    {% endif %}
                 </div>
                 <div class="card-body">
                     <h4 class="card-title">On {{ comment.createdAt | date('m/d/Y') }} at {{ comment.createdAt | date('H:i') }}</h4>

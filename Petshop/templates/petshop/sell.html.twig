@@ -1,6 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {% if not app.user %}
+        <h1>
+            Access Denied
+        </h1>
+    <p>
+        You don't have permission to access 'sell' page on this server. <br/>
+        Log in to the website if you want to go to this page !
+    </p>
+
+    {% else %}
     <h1>
         Sell your pet here
     </h1>
@@ -21,4 +31,6 @@
     </p>
 
     {{ form_end(formPet) }}
+
+    {% endif %}
 {% endblock body %}
