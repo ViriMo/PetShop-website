@@ -5,7 +5,7 @@
         <h1 style="margin-left: 40%">
             Petshop list
         </h1>
-        {% for pet in pets %}
+        {% for pet in pagination %}
             <h2>
                 {{ pet.name }}
             </h2>
@@ -25,5 +25,9 @@
             <hr/>
         {% endfor %}
     </section>
+
+    <div class="pagination">
+        {{ knp_pagination_render(pagination) }}
+    </div>
 
 {% endblock body %}

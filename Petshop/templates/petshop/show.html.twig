@@ -49,7 +49,7 @@
         {% endif %}
         <hr/>
 
-        {% for comment in pet.comments %}
+        {% for comment in pagination %}
             <div class="card text-white bg-primary mb-3">
                 <div class="card-header">
                     <img src=" {{ comment.user.image }} " alt="net bug" style="width: 50px; height: 50px;">
@@ -59,14 +59,69 @@
                     <a class="btn btn-success"  href="{{ path('edit', {'id': comment.id}) }}" style="float: right;">Edit</a>
                     {% endif %}
                     {% endif %}
+                    : On {{ comment.createdAt | date('m/d/Y') }} at {{ comment.createdAt | date('H:i') }}
                 </div>
                 <div class="card-body">
-                    <h4 class="card-title">On {{ comment.createdAt | date('m/d/Y') }} at {{ comment.createdAt | date('H:i') }}</h4>
-                    <p class="card-text">{{ comment.content }}</p>
+                    <p class="card-text">
+                        {{ comment.content }}
+                    </p>
+                    <a href="{{ path('com_likes', {'id': comment.id}) }}" class="btn btn-outline-info js-like" style="float: right;">
+                        {%  if app.user and comment.isLikedByUser(app.user) %}
+                            <i class="fas fa-thumbs-up"></i>
+                        {% else %}
+                            <i class="far fa-thumbs-up"></i>
+                        {% endif %}
+                        <span class="js-likes"> {{ comment.likes | length}}</span>
+                        <span class="js-label"> like{% if comment.likes | length > 1 %}s{% endif %} </span>
+                    </a>
+                    </a>
                 </div>
             </div>
             <hr/>
         {% endfor %}
 
+        <div class="pagination">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+
     </section>
 {% endblock body %}
+
+{% block javascripts %}
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+        
+        function onClickBtnLike(event) {
+            event.preventDefault();
+
+            const url = this.href;
+            const spanCount = this.querySelector('span.js-likes');
+            const like = this.querySelector('i');
+
+            axios.get(url).then(function (response) {
+                spanCount.textContent = response.data.likes;
+
+                if (like.classList.contains('fas')) {
+                    like.classList.replace('fas', 'far');
+                } else {
+                    like.classList.replace('far', 'fas');
+                }
+            }).catch(function (error) {
+                if (error.response.status === 403) {
+                    window.alert('log in to like comments !')
+                } else {
+                    window.alert('An unknown error has occurred.')
+                }
+            });
+        }
+
+        document.querySelectorAll('a.js-like').forEach(function (link) {
+            link.addEventListener('click', onClickBtnLike);
+        })
+
+
+    </script>
+
+
+{% endblock %}

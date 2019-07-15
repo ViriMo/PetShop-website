@@ -2,15 +2,18 @@
 
 namespace App\Controller;
 
+
+
 use App\Repository\CommentRepository;
 use App\Entity\Pet;
 use App\Entity\Comment;
 use App\Repository\PetRepository;
 use Doctrine\Common\Persistence\ObjectManager;
-use http\Client\Curl\User;
+use http\Env\Response;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
 use App\Form\CommentType;
 use App\Form\PetType;
 
@@ -21,7 +24,7 @@ class BlogController extends AbstractController
      */
     public function index()
     {
-        return $this->render('blog/index.html.twig', [
+        return $this->render('petshop/index.html.twig', [
             'controller_name' => 'BlogController',
         ]);
     }
@@ -37,11 +40,16 @@ class BlogController extends AbstractController
     /**
      * @Route("/pet", name="pet")
      */
-    public function pet(PetRepository $repo)
+    public function pet(PetRepository $repo, Request $request, PaginatorInterface $paginator)
     {
         $pet = $repo->findby([], ["id" => 'DESC']);
+        $pagination = $paginator->paginate(
+            $pet, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            5 /*limit per page*/
+        );
         return $this->render('petshop/pet.html.twig', [
-            'pets' => $pet
+            'pagination' => $pagination
         ]);
     }
 
@@ -114,9 +122,20 @@ class BlogController extends AbstractController
     /**
      * @Route("/pet/{id}", name="pet_show")
      */
-    public function show(PetRepository $petrepo, $id, Request $request, ObjectManager $manager)
+    public function show(PetRepository $petrepo, $id, Request $request, ObjectManager $manager,
+                         PaginatorInterface $paginator)
     {
         $pet = $petrepo->findOneBy(["id" => $id]);
+        if(!$pet) {
+            return $this->redirectToRoute('pet');
+        }
+
+        $comRep = $this->getDoctrine()->getRepository(Comment::class);
+        $comment = $comRep->findBy(
+            ['pet' => $pet],
+            ['createdAt' => 'DESC']
+        );
+
         $com = new Comment();
         $form = $this->createForm(CommentType::class, $com);
         $form->handleRequest($request);
@@ -132,8 +151,17 @@ class BlogController extends AbstractController
             return $this->redirectToRoute('pet_show', ['id' => $pet->getId()]);
         }
 
+
+
+        $pagination = $paginator->paginate(
+            $comment, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            5 /*limit per page*/
+        );
+
         return $this->render('petshop/show.html.twig', [
             "pet" => $pet,
+            "pagination" => $pagination,
             "formComment" => $form->createView()
             ]);
     }
