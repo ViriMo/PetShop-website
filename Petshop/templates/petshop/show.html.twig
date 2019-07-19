@@ -4,21 +4,28 @@
 
 {% block body %}
     <a class="btn btn-primary" href="{{ path('pet') }}">Back</a>
+
     <section class="pet">
         <h1>
             {{ pet.name }}
         </h1>
         <div class="metadata">
-            <img src="{{ pet.image }}"alt="" style="height: 500px; width: 500px;">
-            <p>
-                Seller : {{ pet.user.username }}
-                <br/>
-                {{ pet.content }}
-                <br/>
-                Pet Price : {{ pet.price }} €
-
-            </p>
-            <hr/>
+            <div class="row">
+                <div class="col-sm">
+                    <img src="{{ pet.image }}"alt="" style="height: 100%; width: 100%;">
+                </div>
+                <div class="col-sm">
+                    <p>
+                        Seller : {{ pet.user.username }}
+                    </p>
+                    <p>
+                        {{ pet.content }}
+                    </p>
+                        Pet Price : {{ pet.price }} €
+                    </p>
+                </div>
+                <hr/>
+            </div>
         </div>
     </section>
     <section>
@@ -44,7 +51,7 @@
         {{ form_end(formComment) }}
         {% else %}
             <h3>
-                Login to add comment !
+                Login to add comments !
             </h3>
         {% endif %}
         <hr/>
@@ -54,12 +61,10 @@
                 <div class="card-header">
                     <img src=" {{ comment.user.image }} " alt="net bug" style="width: 50px; height: 50px;">
                     {{ comment.user.username }}
-                    {% if app.user %}
-                    {% if app.user.username == comment.user.username %}
-                    <a class="btn btn-success"  href="{{ path('edit', {'id': comment.id}) }}" style="float: right;">Edit</a>
+                    {% if app.user and app.user.username == comment.user.username %}
+                    <a class="btn btn-success"  href="{{ path('edit_Com', {'id': comment.id}) }}" style="float: right;">Edit Comment</a>
                     {% endif %}
-                    {% endif %}
-                    : On {{ comment.createdAt | date('m/d/Y') }} at {{ comment.createdAt | date('H:i') }}
+                    commented On {{ comment.createdAt | date('m/d/Y') }} at {{ comment.createdAt | date('H:i') }}
                 </div>
                 <div class="card-body">
                     <p class="card-text">

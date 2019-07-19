@@ -2,18 +2,48 @@
 
 
 {% block body %}
-    <h2>
-        Edit comment
-    </h2>
-    {{ form_start(formComment) }}
+        {% if edit == true and app.user and pet.user.username is defined and app.user.username == pet.user.username%}
 
-    {{ form_row(formComment.content, {'label': 'Comment'}) }}
+            <h2>
+                Edit Pet options for sell
+            </h2>
+            {{ form_start(formPet) }}
 
-    <p>
-        <button type="submit" class="btn btn-success">
+            {{ form_row(formPet.name, {'label': 'Name'}) }}
+
+            {{ form_row(formPet.content, {'label': 'Description'}) }}
+
+            {{ form_row(formPet.price, {'label': 'Price'}) }}
+
+            {{ form_row(formPet.image, {'label': 'Image'}) }}
+
+            <p>
+                <button type="submit" class="btn btn-success">
+                    Edit Pet options
+                </button>
+            </p>
+
+            {{ form_end(formPet) }}
+
+        {% elseif app.user and com.user.username is defined and app.user.username == com.user.username %}
+
+        <h2>
             Edit comment
-        </button>
-    </p>
+        </h2>
+        {{ form_start(formComment) }}
 
-    {{ form_end(formComment) }}
+        {{ form_row(formComment.content, {'label': 'Comment'}) }}
+
+        <p>
+            <button type="submit" class="btn btn-success">
+                Edit comment
+            </button>
+        </p>
+
+        {{ form_end(formComment) }}
+
+        {% else %}
+            ERROR <br/>
+            You can't edit something that does not belong to you !!!
+        {% endif %}
 {% endblock body %}

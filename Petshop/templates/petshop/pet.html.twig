@@ -8,19 +8,30 @@
         {% for pet in pagination %}
             <h2>
                 {{ pet.name }}
+
+                {% if app.user and app.user.username == pet.user.username %}
+                    <a class="btn btn-success"  href="{{ path('edit_pet', {'id': pet.id}) }}" style="float: right;">Edit Pet</a>
+                {% endif %}
             </h2>
             <div class="metadata">
-                <img src="{{ pet.image }}" alt="Internet died" style="height: 500px; width: 500px;">
-                <p>
-                    {{ pet.content }}
-                </p>
-
-                    Pet Price : {{ pet.price }} €
-                <br/>
-                <a href="{{ path('pet_show', {'id': pet.id}) }}" class="btn btn-primary">
-                    Learn more
-                </a>
-                <br/>
+                <div class="row">
+                    <div class="col-sm">
+                        <img src="{{ pet.image }}" alt="Internet died"; style="width: 100%; height: 100%">
+                    </div>
+                    <div class="col-sm">
+                        <p>
+                            {{ pet.content }}
+                        </p>
+                        <p>
+                            Pet Price : {{ pet.price }} €
+                        </p>
+                        <br/>
+                        <a href="{{ path('pet_show', {'id': pet.id}) }}" class="btn btn-primary">
+                            Learn more
+                        </a>
+                        <br/>
+                    </div>
+                </div>
             </div>
             <hr/>
         {% endfor %}

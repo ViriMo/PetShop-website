@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if not app.user or not app.user.username == user.username %}
+
+        <h1> Error 404 : Page not found </h1>
+
+    {% else %}
+
+
+        {% if edit == true %}
+
+            <h1>
+                Edit profile
+            </h1>
+
+            {{ form_start(formUser) }}
+
+            {{ form_row(formUser.username, {'label': 'Username'}) }}
+
+            {{ form_row(formUser.image, {'label': 'Image'}) }}
+
+            <button type="submit" class="btn btn-primary">Edit Profile</button>
+            {{ form_end(formUser) }}
+
+
+        {% else %}
+
+            <h1>
+                {{  user.username }}'s Profile
+                <a class="btn btn-success"  href="{{ path('edit_profile', {'id': user.username}) }}" style="float: right;">Edit Profile</a>
+            </h1>
+            <div class="row">
+                <div class="col-sm">
+                    <img src="{{ user.image }}"alt="" style="height: 100%; width: 100%;">
+                </div>
+                <div class="col-sm">
+                    Nothing at the moment
+                </div>
+            </div>
+
+            <hr/>
+
+
+            <h1>
+                Pet selling list :
+            </h1>
+
+            {% if pagination is not defined %}
+                You do not sell any pet.
+            {% else %}
+                {% for pet in pagination %}
+                    <h1>{{ pet.name }}</h1>
+                    <a class="btn btn-success"  href="{{ path('edit_pet', {'id': pet.id}) }}" style="float: right;">Edit Pet</a>
+                    <div class="metadata">
+                        <div class="row">
+                            <div class="col-sm">
+                                <img src="{{ pet.image }}"alt="" style="height: 100%; width: 100%;">
+                            </div>
+                            <div class="col-sm">
+                                <p>
+                                    {{ pet.content }}
+                                </p>
+                                Pet Price : {{ pet.price }} €
+                                </p>
+                            </div>
+                            <hr/>
+                        </div>
+                    </div>
+                    <hr/>
+                {% endfor %}
+
+
+            {% endif %}
+            <div class="pagination">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+
+        {% endif %}
+
+    {% endif %}
+{% endblock body %}

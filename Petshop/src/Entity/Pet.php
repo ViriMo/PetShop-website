@@ -26,6 +26,7 @@ class Pet
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Range(max = 1000000000, maxMessage="You can't sell a pet for a higher price than 1 000 000 000 €!")
      */
     private $price;
 

@@ -3,6 +3,12 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}PetShop{% endblock %}</title>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+                integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+                integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+                integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://bootswatch.com/4/superhero/bootstrap.min.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
               integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
@@ -43,7 +49,28 @@
                     {% if not app.user %}
                     <a class="btn btn-secondary my-2 my-sm-0" href="{{ path('login') }}">log in</a>
                     {% else %}
-                    <a class="btn btn-secondary my-2 my-sm-0" href="{{ path('logout') }}">Log Out</a>
+                        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                            <div class="btn-group" role="group">
+                                <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ app.user.username}}</button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px,65px, 0px); top: 0; left: 0; will-change: transform;">
+                                    <a class="dropdown-item" href="{{ path('profile', {"id": app.user.username}) }}">
+                                        <i class="fas fa-user"></i>
+                                        Profile
+                                    </a>
+                                    <a class="dropdown-item" href="{{ path('edit_profile', {"id": app.user.username}) }}">
+                                        <i class="fas fa-cog"></i>
+                                        Edit settings
+                                    </a>
+                                    <a class="dropdown-item" href="{{ path('logout') }}">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        Log Out
+                                    </a>
+                                </div>
+                            </div>
+                            <a class="btn btn-primary" href="{{ path('profile', {"id": app.user.username}) }}">
+                                <img src="{{ app.user.image }}" alt="Ree" style="width: 50px; height: 50px;">
+                            </a>
+                        </div>
                     {% endif %}
                 </form>
             </div>

@@ -24,7 +24,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\Length(min="6", minMessage="Your user name must have at least 6 characters")
+     * @Assert\NotBlank(message="Usename can't be blank !")
      */
     private $username;
 

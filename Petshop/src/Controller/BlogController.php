@@ -9,7 +9,6 @@ use App\Entity\Pet;
 use App\Entity\Comment;
 use App\Repository\PetRepository;
 use Doctrine\Common\Persistence\ObjectManager;
-use http\Env\Response;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,6 +38,10 @@ class BlogController extends AbstractController
 
     /**
      * @Route("/pet", name="pet")
+     * @param PetRepository $repo
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function pet(PetRepository $repo, Request $request, PaginatorInterface $paginator)
     {
@@ -63,6 +66,10 @@ class BlogController extends AbstractController
 
     /**
      * @Route("/sell", name="sell")
+     * @param Pet|null $pet
+     * @param Request $request
+     * @param ObjectManager $manager
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function sell(Pet $pet = null, Request $request, ObjectManager $manager)
     {
@@ -95,12 +102,43 @@ class BlogController extends AbstractController
         return $this->render('petshop/fun.html.twig');
     }
 
+    /**
+     * @Route("/edit/{id}", name="edit_pet")
+     * @param $id
+     * @param PetRepository $petrepo
+     * @param Request $request
+     * @param ObjectManager $manager
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function editPet($id, PetRepository $petrepo, Request $request, ObjectManager $manager)
+    {
+        $pet = $petrepo->findOneBy(["id" => $id]);
+
+        $form = $this->createForm(PetType::class, $pet);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($pet);
+            $manager->flush();
+            return $this->redirectToRoute('pet');
+        }
+
+        return $this->render('petshop/edit.html.twig', [
+            "formPet" => $form->createView(),
+            "edit" => true,
+            "pet" => $pet
+        ]);
+    }
 
 
     /**
-     * @Route("/pet/edit/{id}", name="edit")
+     * @Route("/pet/edit/{id}", name="edit_Com")
+     * @param $id
+     * @param CommentRepository $commentrepo
+     * @param Request $request
+     * @param ObjectManager $manager
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function edit($id, CommentRepository $commentrepo, Request $request, ObjectManager $manager)
+    public function editCom($id, CommentRepository $commentrepo, Request $request, ObjectManager $manager)
     {
         $comment = $commentrepo->findOneBy(["id" => $id]);
 
@@ -114,13 +152,22 @@ class BlogController extends AbstractController
 
 
         return $this->render('petshop/edit.html.twig', [
-            "formComment" => $form->createView()
+            "formComment" => $form->createView(),
+            "edit" => false,
+            "com" => $comment
         ]);
     }
 
 
     /**
      * @Route("/pet/{id}", name="pet_show")
+     * @param PetRepository $petrepo
+     * @param $id
+     * @param Request $request
+     * @param ObjectManager $manager
+     * @param PaginatorInterface $paginator
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      */
     public function show(PetRepository $petrepo, $id, Request $request, ObjectManager $manager,
                          PaginatorInterface $paginator)
